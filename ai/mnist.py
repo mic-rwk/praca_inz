@@ -1,6 +1,16 @@
 import numpy as np
 import keras
 from keras import layers
+import tensorflow as tf
+
+def generate_confusion_matrix(model, x_test, y_test, num_classes):
+    predictions = model.predict(x_test)
+    y_pred = np.argmax(predictions, axis=1)
+    y_true = np.argmax(y_test, axis=1)
+
+    conf_matrix = tf.math.confusion_matrix(y_true, y_pred, num_classes=num_classes)
+    print('Confusion matrix:')
+    print(conf_matrix.numpy())
 
 # Model / data parameters
 num_classes = 10
@@ -49,3 +59,5 @@ model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, validation_spl
 score = model.evaluate(x_test, y_test, verbose=0)
 print("Test loss:", score[0])
 print("Test accuracy:", score[1])
+
+generate_confusion_matrix(model, x_test, y_test, num_classes)
