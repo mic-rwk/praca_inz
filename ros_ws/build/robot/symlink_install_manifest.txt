@@ -1,3 +1,4 @@
+/inz/ros_ws/install/robot/share/robot/description/gazebo_control.xacro
 /inz/ros_ws/install/robot/share/robot/description/inertial_macros.xacro
 /inz/ros_ws/install/robot/share/robot/description/robot.urdf.xacro
 /inz/ros_ws/install/robot/share/robot/description/robot_core.xacro
