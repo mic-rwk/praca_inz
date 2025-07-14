@@ -1,6 +1,7 @@
 /inz/ros_ws/install/robot/share/robot/description/inertial_macros.xacro
 /inz/ros_ws/install/robot/share/robot/description/robot.urdf.xacro
 /inz/ros_ws/install/robot/share/robot/description/robot_core.xacro
+/inz/ros_ws/install/robot/share/robot/launch/launch_sim_launch.py
 /inz/ros_ws/install/robot/share/robot/launch/robot_launch.py
 /inz/ros_ws/install/robot/share/robot/worlds/willowgarage.world
 /inz/ros_ws/install/robot/share/ament_index/resource_index/package_run_dependencies/robot
