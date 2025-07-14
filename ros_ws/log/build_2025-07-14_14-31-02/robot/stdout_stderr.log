@@ -1,0 +1,34 @@
+-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found ament_lint_auto: 0.9.8 (/opt/ros/foxy/share/ament_lint_auto/cmake)
+-- Added test 'copyright' to check source files copyright and LICENSE
+-- Added test 'flake8' to check Python code syntax and style conventions
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'pep257' to check Python code against some of the style conventions in PEP 257
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /inz/ros_ws/build/robot
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /inz/ros_ws/install/robot/share/robot/description/inertial_macros.xacro
+-- Up-to-date symlink: /inz/ros_ws/install/robot/share/robot/description/robot.urdf.xacro
+-- Up-to-date symlink: /inz/ros_ws/install/robot/share/robot/description/robot_core.xacro
+-- Up-to-date symlink: /inz/ros_ws/install/robot/share/robot/launch/robot_launch.py
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/worlds/willowgarage.world
+-- Symlinking: /inz/ros_ws/install/robot/share/ament_index/resource_index/package_run_dependencies/robot
+-- Symlinking: /inz/ros_ws/install/robot/share/ament_index/resource_index/parent_prefix_path/robot
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/environment/ament_prefix_path.sh
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/environment/ament_prefix_path.dsv
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/environment/path.sh
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/environment/path.dsv
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/local_setup.bash
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/local_setup.sh
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/local_setup.zsh
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/local_setup.dsv
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/package.dsv
+-- Symlinking: /inz/ros_ws/install/robot/share/ament_index/resource_index/packages/robot
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/cmake/robotConfig.cmake
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/cmake/robotConfig-version.cmake
+-- Symlinking: /inz/ros_ws/install/robot/share/robot/package.xml

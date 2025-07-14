@@ -1,0 +1,6 @@
+Invoking command in '/inz/ros_ws/build/robot': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake /inz/ros_ws/src/robot -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/inz/ros_ws/install/robot
+Invoked command in '/inz/ros_ws/build/robot' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake /inz/ros_ws/src/robot -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/inz/ros_ws/install/robot
+Invoking command in '/inz/ros_ws/build/robot': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake --build /inz/ros_ws/build/robot -- -j12 -l12
+Invoked command in '/inz/ros_ws/build/robot' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake --build /inz/ros_ws/build/robot -- -j12 -l12
+Invoking command in '/inz/ros_ws/build/robot': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake --install /inz/ros_ws/build/robot
+Invoked command in '/inz/ros_ws/build/robot' returned '1': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake --install /inz/ros_ws/build/robot
