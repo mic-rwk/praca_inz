@@ -19,6 +19,10 @@
         <color rgba="0 0 0 1"/>
     </material>
 
+    <material name="grey" >
+        <color rgba="0.5725490196078431 0.5843137254901961 0.5686274509803921 1.0" />
+    </material>
+
     <!-- BASE LINK -->
 
     <link name="base_link">
