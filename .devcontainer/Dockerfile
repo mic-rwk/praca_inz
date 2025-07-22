@@ -25,7 +25,13 @@ RUN sudo usermod --append --groups video $USERNAME
 RUN sudo apt update && sudo apt upgrade -y
 
 # Install Git
-RUN sudo apt install -y git
+RUN sudo apt install -y git \
+                        ros-foxy-gazebo-ros-pkgs \
+                        ros-foxy-xacro \
+                        ros-foxy-ros2-control \ 
+                        ros-foxy-ros2-controllers \
+                        ros-foxy-gazebo-ros2-control \
+                        ros-foxy-joint-state-publisher-gui
 
 # Rosdep update
 RUN rosdep update
