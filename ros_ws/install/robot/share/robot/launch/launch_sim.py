@@ -1,1 +1,0 @@
-/inz/ros_ws/src/robot/launch/launch_sim.py

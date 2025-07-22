@@ -1,1 +1,2 @@
-/inz/ros_ws/build/robot/ament_cmake_environment_hooks/local_setup.dsv
+source;share/robot/environment/ament_prefix_path.sh
+source;share/robot/environment/path.sh
