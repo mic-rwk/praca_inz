@@ -17,9 +17,15 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+
+add_executable(readinglaser ./nodes/ReadingLaser.cpp)
+ament_target_dependencies(readinglaser rclcpp std_msgs sensor_msgs)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -33,8 +39,13 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY description launch worlds config
+  DIRECTORY description launch worlds config nodes
   DESTINATION share/${PROJECT_NAME}
+)
+
+install(TARGETS
+  readinglaser
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_package()

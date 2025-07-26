@@ -56,18 +56,6 @@ CMAKE_BINARY_DIR = /inz/ros_ws/build/robot
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -123,6 +111,18 @@ test/fast: test
 
 .PHONY : test/fast
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
@@ -168,6 +168,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named readinglaser
+
+# Build rule for target.
+readinglaser: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 readinglaser
+.PHONY : readinglaser
+
+# fast build rule for target.
+readinglaser/fast:
+	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/build
+.PHONY : readinglaser/fast
+
+#=============================================================================
 # Target rules for targets named robot_uninstall
 
 # Build rule for target.
@@ -193,21 +206,52 @@ uninstall/fast:
 	$(MAKE) -f CMakeFiles/uninstall.dir/build.make CMakeFiles/uninstall.dir/build
 .PHONY : uninstall/fast
 
+nodes/ReadingLaser.o: nodes/ReadingLaser.cpp.o
+
+.PHONY : nodes/ReadingLaser.o
+
+# target to build an object file
+nodes/ReadingLaser.cpp.o:
+	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/nodes/ReadingLaser.cpp.o
+.PHONY : nodes/ReadingLaser.cpp.o
+
+nodes/ReadingLaser.i: nodes/ReadingLaser.cpp.i
+
+.PHONY : nodes/ReadingLaser.i
+
+# target to preprocess a source file
+nodes/ReadingLaser.cpp.i:
+	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/nodes/ReadingLaser.cpp.i
+.PHONY : nodes/ReadingLaser.cpp.i
+
+nodes/ReadingLaser.s: nodes/ReadingLaser.cpp.s
+
+.PHONY : nodes/ReadingLaser.s
+
+# target to generate assembly for a file
+nodes/ReadingLaser.cpp.s:
+	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/nodes/ReadingLaser.cpp.s
+.PHONY : nodes/ReadingLaser.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
+	@echo "... install/strip"
+	@echo "... readinglaser"
 	@echo "... install/local"
 	@echo "... robot_uninstall"
 	@echo "... uninstall"
+	@echo "... nodes/ReadingLaser.o"
+	@echo "... nodes/ReadingLaser.i"
+	@echo "... nodes/ReadingLaser.s"
 .PHONY : help
 
 

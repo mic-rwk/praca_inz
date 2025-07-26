@@ -53,7 +53,7 @@ CMAKE_BINARY_DIR = /inz/ros_ws/build/robot
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all:
+all: CMakeFiles/readinglaser.dir/all
 
 .PHONY : all
 
@@ -63,10 +63,38 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/readinglaser.dir/clean
 clean: CMakeFiles/robot_uninstall.dir/clean
 clean: CMakeFiles/uninstall.dir/clean
 
 .PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/readinglaser.dir
+
+# All Build rule for target.
+CMakeFiles/readinglaser.dir/all:
+	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/depend
+	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/inz/ros_ws/build/robot/CMakeFiles --progress-num=1,2 "Built target readinglaser"
+.PHONY : CMakeFiles/readinglaser.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/readinglaser.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /inz/ros_ws/build/robot/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/readinglaser.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /inz/ros_ws/build/robot/CMakeFiles 0
+.PHONY : CMakeFiles/readinglaser.dir/rule
+
+# Convenience name for target.
+readinglaser: CMakeFiles/readinglaser.dir/rule
+
+.PHONY : readinglaser
+
+# clean rule for target.
+CMakeFiles/readinglaser.dir/clean:
+	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/clean
+.PHONY : CMakeFiles/readinglaser.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/robot_uninstall.dir
