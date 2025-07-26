@@ -9,9 +9,11 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
 
-
+import shutil
 
 def generate_launch_description():
+    
+    shutil.rmtree('src/robot/bag_files/data1', ignore_errors=True)
 
     package_name='robot'
 
