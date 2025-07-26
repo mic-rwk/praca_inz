@@ -4,7 +4,7 @@ from ament_index_python.packages import get_package_share_directory
 
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
@@ -43,10 +43,16 @@ def generate_launch_description():
         arguments=["joint_broad"],
     )
 
+    rosbag_record = ExecuteProcess(
+    cmd=['ros2', 'bag', 'record', '-o', './src/robot/bag_files/data1', '/scan'],
+    output='screen'
+)
+
     return LaunchDescription([
         rsp,
         gazebo,
         spawn_entity,
         diff_drive_spawner,
-        joint_broad_spawner
+        joint_broad_spawner,
+        rosbag_record
     ])
