@@ -24,8 +24,11 @@ find_package(sensor_msgs REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-add_executable(readinglaser ./nodes/ReadingLaser.cpp)
-ament_target_dependencies(readinglaser rclcpp std_msgs sensor_msgs)
+add_executable(reading_laser ./nodes/ReadingLaser.cpp)
+ament_target_dependencies(reading_laser rclcpp std_msgs sensor_msgs)
+
+add_executable(reading_encoder ./nodes/Encoder.cpp)
+ament_target_dependencies(reading_encoder rclcpp std_msgs sensor_msgs)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -44,7 +47,7 @@ install(
 )
 
 install(TARGETS
-  readinglaser
+  reading_laser reading_encoder 
   DESTINATION lib/${PROJECT_NAME}
 )
 
