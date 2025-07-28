@@ -20,8 +20,10 @@ public:
 
 private:
   void topic_callback(const sensor_msgs::msg::LaserScan::SharedPtr _msg) const {
-    RCLCPP_INFO(this->get_logger(), "I heard: '%f' '%f'", _msg->ranges[0],
-                _msg->ranges[100]);
+
+    for(auto & msg : _msg->ranges){
+      RCLCPP_INFO(this->get_logger(), "Range : %f", msg);
+    }
   }
   rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr subscription_;
 };
@@ -29,7 +31,6 @@ private:
 int main(int argc, char *argv[]) {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<ReadingLaser>();
-  // RCLCPP_INFO(node->get_logger(), "Hello my friends");
   rclcpp::spin(node);
   rclcpp::shutdown();
   return 0;
