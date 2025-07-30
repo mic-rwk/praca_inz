@@ -56,6 +56,18 @@ CMAKE_BINARY_DIR = /inz/ros_ws/build/robot
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -111,18 +123,6 @@ test/fast: test
 
 .PHONY : test/fast
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
@@ -168,17 +168,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named readinglaser
+# Target rules for targets named reading_velocities
 
 # Build rule for target.
-readinglaser: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 readinglaser
-.PHONY : readinglaser
+reading_velocities: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 reading_velocities
+.PHONY : reading_velocities
 
 # fast build rule for target.
-readinglaser/fast:
-	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/build
-.PHONY : readinglaser/fast
+reading_velocities/fast:
+	$(MAKE) -f CMakeFiles/reading_velocities.dir/build.make CMakeFiles/reading_velocities.dir/build
+.PHONY : reading_velocities/fast
 
 #=============================================================================
 # Target rules for targets named robot_uninstall
@@ -194,6 +194,32 @@ robot_uninstall/fast:
 .PHONY : robot_uninstall/fast
 
 #=============================================================================
+# Target rules for targets named reading_encoder
+
+# Build rule for target.
+reading_encoder: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 reading_encoder
+.PHONY : reading_encoder
+
+# fast build rule for target.
+reading_encoder/fast:
+	$(MAKE) -f CMakeFiles/reading_encoder.dir/build.make CMakeFiles/reading_encoder.dir/build
+.PHONY : reading_encoder/fast
+
+#=============================================================================
+# Target rules for targets named reading_laser
+
+# Build rule for target.
+reading_laser: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 reading_laser
+.PHONY : reading_laser
+
+# fast build rule for target.
+reading_laser/fast:
+	$(MAKE) -f CMakeFiles/reading_laser.dir/build.make CMakeFiles/reading_laser.dir/build
+.PHONY : reading_laser/fast
+
+#=============================================================================
 # Target rules for targets named uninstall
 
 # Build rule for target.
@@ -206,13 +232,40 @@ uninstall/fast:
 	$(MAKE) -f CMakeFiles/uninstall.dir/build.make CMakeFiles/uninstall.dir/build
 .PHONY : uninstall/fast
 
+nodes/Encoder.o: nodes/Encoder.cpp.o
+
+.PHONY : nodes/Encoder.o
+
+# target to build an object file
+nodes/Encoder.cpp.o:
+	$(MAKE) -f CMakeFiles/reading_encoder.dir/build.make CMakeFiles/reading_encoder.dir/nodes/Encoder.cpp.o
+.PHONY : nodes/Encoder.cpp.o
+
+nodes/Encoder.i: nodes/Encoder.cpp.i
+
+.PHONY : nodes/Encoder.i
+
+# target to preprocess a source file
+nodes/Encoder.cpp.i:
+	$(MAKE) -f CMakeFiles/reading_encoder.dir/build.make CMakeFiles/reading_encoder.dir/nodes/Encoder.cpp.i
+.PHONY : nodes/Encoder.cpp.i
+
+nodes/Encoder.s: nodes/Encoder.cpp.s
+
+.PHONY : nodes/Encoder.s
+
+# target to generate assembly for a file
+nodes/Encoder.cpp.s:
+	$(MAKE) -f CMakeFiles/reading_encoder.dir/build.make CMakeFiles/reading_encoder.dir/nodes/Encoder.cpp.s
+.PHONY : nodes/Encoder.cpp.s
+
 nodes/ReadingLaser.o: nodes/ReadingLaser.cpp.o
 
 .PHONY : nodes/ReadingLaser.o
 
 # target to build an object file
 nodes/ReadingLaser.cpp.o:
-	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/nodes/ReadingLaser.cpp.o
+	$(MAKE) -f CMakeFiles/reading_laser.dir/build.make CMakeFiles/reading_laser.dir/nodes/ReadingLaser.cpp.o
 .PHONY : nodes/ReadingLaser.cpp.o
 
 nodes/ReadingLaser.i: nodes/ReadingLaser.cpp.i
@@ -221,7 +274,7 @@ nodes/ReadingLaser.i: nodes/ReadingLaser.cpp.i
 
 # target to preprocess a source file
 nodes/ReadingLaser.cpp.i:
-	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/nodes/ReadingLaser.cpp.i
+	$(MAKE) -f CMakeFiles/reading_laser.dir/build.make CMakeFiles/reading_laser.dir/nodes/ReadingLaser.cpp.i
 .PHONY : nodes/ReadingLaser.cpp.i
 
 nodes/ReadingLaser.s: nodes/ReadingLaser.cpp.s
@@ -230,8 +283,35 @@ nodes/ReadingLaser.s: nodes/ReadingLaser.cpp.s
 
 # target to generate assembly for a file
 nodes/ReadingLaser.cpp.s:
-	$(MAKE) -f CMakeFiles/readinglaser.dir/build.make CMakeFiles/readinglaser.dir/nodes/ReadingLaser.cpp.s
+	$(MAKE) -f CMakeFiles/reading_laser.dir/build.make CMakeFiles/reading_laser.dir/nodes/ReadingLaser.cpp.s
 .PHONY : nodes/ReadingLaser.cpp.s
+
+nodes/Velocity.o: nodes/Velocity.cpp.o
+
+.PHONY : nodes/Velocity.o
+
+# target to build an object file
+nodes/Velocity.cpp.o:
+	$(MAKE) -f CMakeFiles/reading_velocities.dir/build.make CMakeFiles/reading_velocities.dir/nodes/Velocity.cpp.o
+.PHONY : nodes/Velocity.cpp.o
+
+nodes/Velocity.i: nodes/Velocity.cpp.i
+
+.PHONY : nodes/Velocity.i
+
+# target to preprocess a source file
+nodes/Velocity.cpp.i:
+	$(MAKE) -f CMakeFiles/reading_velocities.dir/build.make CMakeFiles/reading_velocities.dir/nodes/Velocity.cpp.i
+.PHONY : nodes/Velocity.cpp.i
+
+nodes/Velocity.s: nodes/Velocity.cpp.s
+
+.PHONY : nodes/Velocity.s
+
+# target to generate assembly for a file
+nodes/Velocity.cpp.s:
+	$(MAKE) -f CMakeFiles/reading_velocities.dir/build.make CMakeFiles/reading_velocities.dir/nodes/Velocity.cpp.s
+.PHONY : nodes/Velocity.cpp.s
 
 # Help Target
 help:
@@ -239,19 +319,27 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... install/strip"
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
-	@echo "... install/strip"
-	@echo "... readinglaser"
+	@echo "... reading_velocities"
 	@echo "... install/local"
 	@echo "... robot_uninstall"
+	@echo "... reading_encoder"
+	@echo "... reading_laser"
 	@echo "... uninstall"
+	@echo "... nodes/Encoder.o"
+	@echo "... nodes/Encoder.i"
+	@echo "... nodes/Encoder.s"
 	@echo "... nodes/ReadingLaser.o"
 	@echo "... nodes/ReadingLaser.i"
 	@echo "... nodes/ReadingLaser.s"
+	@echo "... nodes/Velocity.o"
+	@echo "... nodes/Velocity.i"
+	@echo "... nodes/Velocity.s"
 .PHONY : help
 
 

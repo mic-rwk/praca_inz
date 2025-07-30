@@ -46,7 +46,7 @@ def generate_launch_description():
     )
 
     rosbag_record = ExecuteProcess(
-    cmd=['ros2', 'bag', 'record', '-o', './src/robot/bag_files/data1', '/scan'],
+    cmd=['ros2', 'bag', 'record', '-o', './src/robot/bag_files/data1', '/scan', '/odom', '/joint_states'],
     output='screen'
 )
 

@@ -9,8 +9,12 @@
 /inz/ros_ws/install/robot/share/robot/worlds/willowgarage.world
 /inz/ros_ws/install/robot/share/robot/config/controllers.yaml
 /inz/ros_ws/install/robot/share/robot/config/robot_view.rviz
+/inz/ros_ws/install/robot/share/robot/nodes/Velocity.cpp
 /inz/ros_ws/install/robot/share/robot/nodes/ReadingLaser.cpp
-/inz/ros_ws/install/robot/lib/robot/readinglaser
+/inz/ros_ws/install/robot/share/robot/nodes/Encoder.cpp
+/inz/ros_ws/install/robot/lib/robot/reading_laser
+/inz/ros_ws/install/robot/lib/robot/reading_encoder
+/inz/ros_ws/install/robot/lib/robot/reading_velocities
 /inz/ros_ws/install/robot/share/ament_index/resource_index/package_run_dependencies/robot
 /inz/ros_ws/install/robot/share/ament_index/resource_index/parent_prefix_path/robot
 /inz/ros_ws/install/robot/share/robot/environment/ament_prefix_path.sh
