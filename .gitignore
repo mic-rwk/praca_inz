@@ -1,4 +1,7 @@
 # Colcon output
-build
-log
-install
+ros_ws/build
+ros_ws/log
+ros_ws/install
+
+#DB files from ros bag
+ros_ws/src/robot/bag_files/data1/
