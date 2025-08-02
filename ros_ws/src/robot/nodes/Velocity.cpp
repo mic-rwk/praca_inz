@@ -34,6 +34,7 @@ private:
     robot::msg::VelocityData robot_velocity_output;
     robot_velocity_output.linear = linear_vel;
     robot_velocity_output.angular = angular_vel;
+    robot_velocity_output.header.stamp = _msg->header.stamp;
 
     publisher_->publish(robot_velocity_output);
   }
