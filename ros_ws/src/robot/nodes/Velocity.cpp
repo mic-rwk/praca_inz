@@ -8,6 +8,8 @@
 #include <std_msgs/msg/string.hpp>
 #include <std_msgs/msg/float64_multi_array.hpp>
 
+#include "robot/msg/velocity_data.hpp"
+
 using std::placeholders::_1;
 
 class Velocity : public rclcpp::Node {
@@ -18,7 +20,7 @@ public:
     subscription_ = this->create_subscription<nav_msgs::msg::Odometry>(
       "odom", 10, std::bind(&Velocity::topic_callback, this, _1));
 
-      publisher_ = this->create_publisher<std_msgs::msg::Float64MultiArray>("robot_velocity_data", 10);
+      publisher_ = this->create_publisher<robot::msg::VelocityData>("robot_velocity_data", 10);
   }
 
 private:
@@ -29,14 +31,14 @@ private:
 
     RCLCPP_INFO(this->get_logger(), "Linear vel: %f\tAngular vel: %f", linear_vel, angular_vel);
 
-    std_msgs::msg::Float64MultiArray robot_velocity_output;
-    robot_velocity_output.data.push_back(linear_vel);
-    robot_velocity_output.data.push_back(angular_vel);
+    robot::msg::VelocityData robot_velocity_output;
+    robot_velocity_output.linear = linear_vel;
+    robot_velocity_output.angular = angular_vel;
 
     publisher_->publish(robot_velocity_output);
   }
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr subscription_;
-  rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr publisher_;
+  rclcpp::Publisher<robot::msg::VelocityData>::SharedPtr publisher_;
 };
 
 int main(int argc, char *argv[]) {
