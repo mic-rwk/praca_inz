@@ -7,6 +7,7 @@
 #include <sensor_msgs/msg/joint_state.hpp>
 #include <std_msgs/msg/float64_multi_array.hpp>
 #include <std_msgs/msg/string.hpp>
+#include "robot/msg/encoder_data.hpp"
 
 using std::placeholders::_1;
 
@@ -18,7 +19,7 @@ public:
     subscription_ = this->create_subscription<sensor_msgs::msg::JointState>(
       "joint_states", 10, std::bind(&Encoder::topic_callback, this, _1));
 
-      publisher_ = this->create_publisher<std_msgs::msg::Float64MultiArray>("encoder_data", 10);
+      publisher_ = this->create_publisher<robot::msg::EncoderData>("encoder_data", 10);
   }
 
 private:
@@ -37,14 +38,15 @@ private:
 
     RCLCPP_INFO(this->get_logger(), "Left vel: %f\tRight vel: %f", left_velocity, right_velocity);
     
-    std_msgs::msg::Float64MultiArray encoder_output;
-    encoder_output.data.push_back(left_velocity);
-    encoder_output.data.push_back(right_velocity);
+    robot::msg::EncoderData encoder_output;
+    encoder_output.left = left_velocity;
+    encoder_output.right = right_velocity;
+    encoder_output.header.stamp = _msg->header.stamp;
 
     publisher_->publish(encoder_output);
   }
   rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr subscription_;
-  rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr publisher_;
+  rclcpp::Publisher<robot::msg::EncoderData>::SharedPtr publisher_;
 };
 
 int main(int argc, char *argv[]) {
