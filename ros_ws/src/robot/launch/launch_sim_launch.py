@@ -64,12 +64,19 @@ def generate_launch_description():
         executable="reading_velocities",
         arguments=["reading_velocities"],
         output={'both': 'log'}
-    )  
+    ) 
+
+    robot_monitor = Node(
+        package="robot",
+        executable="robot_monitor",
+        arguments=["robot_monitor"],
+        output={'both': 'log'}
+    ) 
 
     rosbag_record = ExecuteProcess(
-    cmd=['ros2', 'bag', 'record', '-o', './src/robot/bag_files/data1', '/scan_data', '/robot_velocity_data', '/encoder_data'],
-    output='screen'
-)
+        cmd=['ros2', 'bag', 'record', '-o', './src/robot/bag_files/data1', '/robot_monitor'],
+        output='screen'
+    )
 
     return LaunchDescription([
         rsp,
@@ -81,4 +88,5 @@ def generate_launch_description():
         encoder_data_record,
         laser_data_record,
         robot_velocity_data_record,
+        robot_monitor,
     ])
