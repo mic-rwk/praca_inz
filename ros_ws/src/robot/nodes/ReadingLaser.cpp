@@ -8,6 +8,8 @@
 #include <std_msgs/msg/string.hpp>
 #include <std_msgs/msg/float64_multi_array.hpp>
 
+#include "robot/msg/laser_data.hpp"
+
 using std::placeholders::_1;
 
 class ReadingLaser : public rclcpp::Node {
@@ -18,23 +20,26 @@ public:
     subscription_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
       "scan", 10, std::bind(&ReadingLaser::topic_callback, this, _1));
 
-      publisher_ = this->create_publisher<std_msgs::msg::Float64MultiArray>("scan_data", 10);
+      publisher_ = this->create_publisher<robot::msg::LaserData>("scan_data", 10);
   }
 
 private:
   void topic_callback(const sensor_msgs::msg::LaserScan::SharedPtr _msg) const {
 
-    std_msgs::msg::Float64MultiArray laser_scan_output;
+    robot::msg::LaserData laser_scan_output;
 
     for(auto & msg : _msg->ranges){
       RCLCPP_INFO(this->get_logger(), "Range : %f", msg);
-      laser_scan_output.data.push_back(static_cast<double>(msg));
+      //laser_scan_output.data.push_back(static_cast<double>(msg));
     }
+
+    laser_scan_output.header.stamp = _msg->header.stamp;
+    laser_scan_output.ranges = std::vector<double>(_msg->ranges.begin(), _msg->ranges.end());
     publisher_->publish(laser_scan_output);
   }
   
   rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr subscription_;
-  rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr publisher_;
+  rclcpp::Publisher<robot::msg::LaserData>::SharedPtr publisher_;
 };
 
 int main(int argc, char *argv[]) {
