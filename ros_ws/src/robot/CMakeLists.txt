@@ -21,18 +21,35 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(message_filters REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-add_executable(reading_laser ./nodes/ReadingLaser.cpp)
-ament_target_dependencies(reading_laser rclcpp std_msgs sensor_msgs)
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/EncoderData.msg"
+  "msg/LaserData.msg"
+  "msg/VelocityData.msg"
+  "msg/CollectedData.msg"
+  DEPENDENCIES std_msgs sensor_msgs
+)
 
 add_executable(reading_encoder ./nodes/Encoder.cpp)
 ament_target_dependencies(reading_encoder rclcpp std_msgs sensor_msgs)
+rosidl_target_interfaces(reading_encoder ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 add_executable(reading_velocities ./nodes/Velocity.cpp)
 ament_target_dependencies(reading_velocities rclcpp std_msgs nav_msgs)
+rosidl_target_interfaces(reading_velocities ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+add_executable(reading_laser ./nodes/ReadingLaser.cpp)
+ament_target_dependencies(reading_laser rclcpp std_msgs sensor_msgs)
+rosidl_target_interfaces(reading_laser ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+add_executable(robot_monitor ./nodes/RobotMonitor.cpp)
+ament_target_dependencies(robot_monitor rclcpp std_msgs message_filters)
+rosidl_target_interfaces(robot_monitor ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -51,7 +68,7 @@ install(
 )
 
 install(TARGETS
-  reading_laser reading_encoder reading_velocities
+  reading_laser reading_encoder reading_velocities robot_monitor
   DESTINATION lib/${PROJECT_NAME}
 )
 
