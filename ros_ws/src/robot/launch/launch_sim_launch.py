@@ -45,6 +45,27 @@ def generate_launch_description():
         arguments=["joint_broad"],
     )
 
+    encoder_data_record = Node(
+        package="robot",
+        executable="reading_encoder",
+        arguments=["reading_encoder"],
+        output={'both': 'log'}
+    )
+
+    laser_data_record = Node(
+        package="robot",
+        executable="reading_laser",
+        arguments=["reading_laser"],
+        output={'both': 'log'}
+    )
+
+    robot_velocity_data_record = Node(
+        package="robot",
+        executable="reading_velocities",
+        arguments=["reading_velocities"],
+        output={'both': 'log'}
+    )  
+
     rosbag_record = ExecuteProcess(
     cmd=['ros2', 'bag', 'record', '-o', './src/robot/bag_files/data1', '/scan_data', '/robot_velocity_data', '/encoder_data'],
     output='screen'
@@ -56,5 +77,8 @@ def generate_launch_description():
         spawn_entity,
         diff_drive_spawner,
         joint_broad_spawner,
-        rosbag_record
+        rosbag_record,
+        encoder_data_record,
+        laser_data_record,
+        robot_velocity_data_record,
     ])
