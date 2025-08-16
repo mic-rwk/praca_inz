@@ -24,7 +24,7 @@ Zbieranie danych odbywa się na zasadzie przedstawionej poniżej.
 
 ![Alt text](res/topics.png)
 
-W tym celu wykorzystywane są topici:  */joint_states* ,  */scan*  oraz */odom*. Następnie klasy związane z: prędkościami enkoderów, skanami z lidara oraz odometrią są zapisywane jako nowe, specjalnie utworzone wiadomości, które są zdefiniowane w folderze msg. Dane są synchronizowane w czasie, dzięki paczce [MessageFilter](https://docs.ros.org/en/rolling/p/message_filters/), zaimplementowanej w klasie *RobotMonitor*. Następnie dane są "nagrywane" przez *rosbaga*, który subskrybuje topic */robot_monitor.*
+W tym celu wykorzystywane są topici:  */joint_states* ,  */scan*  oraz */odom*. Następnie klasy związane z: prędkościami enkoderów, skanami z lidara oraz odometrią przetwarzają w odpowiedni sposób wiadomości z tych topiców. Potem publikują nowe, odpowiednie wiadomości (zdefiniowane w folderze msg) do nowych topików. Później dane są synchronizowane w czasie, dzięki paczce [MessageFilter](https://docs.ros.org/en/rolling/p/message_filters/), zaimplementowanej w klasie *RobotMonitor*. Następnie dane są "nagrywane" przez *rosbaga*, który subskrybuje topic */robot_monitor.*
 
 ```python
     rosbag_record = ExecuteProcess(
