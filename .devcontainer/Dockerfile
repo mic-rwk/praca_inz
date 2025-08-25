@@ -33,7 +33,9 @@ RUN sudo apt install -y git \
                         ros-foxy-gazebo-ros2-control \
                         ros-foxy-joint-state-publisher-gui \
                         ros-foxy-navigation2 \
-                        ros-foxy-nav2-bringup
+                        ros-foxy-nav2-bringup \
+                        ros-foxy-twist-mux \
+                        ros-foxy-slam-toolbox
 
 # Rosdep update
 RUN rosdep update
