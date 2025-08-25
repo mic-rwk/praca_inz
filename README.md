@@ -24,7 +24,7 @@ Zbieranie danych odbywa się na zasadzie przedstawionej poniżej.
 
 ![Alt text](res/topics.png)
 
-W tym celu wykorzystywane są topici:  */joint_states* ,  */scan*  oraz */odom*. Następnie klasy związane z: prędkościami enkoderów, skanami z lidara oraz odometrią przetwarzają w odpowiedni sposób wiadomości z tych topiców. Potem publikują nowe, odpowiednie wiadomości (zdefiniowane w folderze msg) do nowych topików. Później dane są synchronizowane w czasie, dzięki paczce [MessageFilter](https://docs.ros.org/en/rolling/p/message_filters/), zaimplementowanej w klasie *RobotMonitor*. Następnie dane są "nagrywane" przez *rosbaga*, który subskrybuje topic */robot_monitor.*
+W tym celu wykorzystywane są topici:  */joint_states* ,  */scan*  oraz */odom*. Następnie klasy związane z: prędkościami enkoderów, skanami z lidara oraz odometrią przetwarzają w odpowiedni sposób wiadomości z tych topiców. Potem publikują nowe, odpowiednie wiadomości (zdefiniowane w folderze msg) do nowych topików. Później dane są synchronizowane w czasie, dzięki paczce [MessageFilters](https://docs.ros.org/en/rolling/p/message_filters/), zaimplementowanej w klasie *RobotMonitor*. Następnie dane są "nagrywane" przez *rosbaga*, który subskrybuje topic */robot_monitor.*
 
 ```python
     rosbag_record = ExecuteProcess(
@@ -46,6 +46,7 @@ ros2 run rviz2 rviz2 -d /opt/ros/foxy/share/nav2_bringup/rviz/nav2_default_view.
 
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_controller/cmd_vel_unstamped
 ```
+![Alt text](res/map.png)
 
 ### Nawigacja
 
@@ -54,7 +55,7 @@ Po uruchomieniu świata Gazebo, włączono nav2_bringup, aby umożliwić nawigac
 ```bash
 ros2 launch robot launch_sim_launch.py world:=./src/robot/worlds/willowgarage.world
 
-ros2 launch nav2_bringup bringup_launch.py use_sim_time:=true autostart:=true map:=map_save2.yaml
+ros2 launch nav2_bringup bringup_launch.py use_sim_time:=true autostart:=true map:=./src/robot/map/1_willowgarage/map_save2.yaml params_file:=./src/robot/config/nav2_params.yaml
 
 ros2 run rviz2 rviz2 -d /opt/ros/foxy/share/nav2_bringup/rviz/nav2_default_view.rviz 
 
