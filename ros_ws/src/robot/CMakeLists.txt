@@ -47,6 +47,10 @@ add_executable(reading_laser ./nodes/ReadingLaser.cpp)
 ament_target_dependencies(reading_laser rclcpp std_msgs sensor_msgs)
 rosidl_target_interfaces(reading_laser ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
+add_executable(reading_diff_laser ./nodes/DiffLaser.cpp)
+ament_target_dependencies(reading_diff_laser rclcpp std_msgs sensor_msgs)
+rosidl_target_interfaces(reading_diff_laser ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
 add_executable(robot_monitor ./nodes/RobotMonitor.cpp)
 ament_target_dependencies(robot_monitor rclcpp std_msgs message_filters)
 rosidl_target_interfaces(robot_monitor ${PROJECT_NAME} "rosidl_typesupport_cpp")
@@ -68,7 +72,7 @@ install(
 )
 
 install(TARGETS
-  reading_laser reading_encoder reading_velocities robot_monitor
+  reading_laser reading_encoder reading_velocities robot_monitor reading_diff_laser
   DESTINATION lib/${PROJECT_NAME}
 )
 
