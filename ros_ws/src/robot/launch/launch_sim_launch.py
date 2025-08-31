@@ -1,11 +1,12 @@
 import os
 
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import get_package_share_directory, get_package_share_path
 
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, ExecuteProcess
+from launch.actions import IncludeLaunchDescription, ExecuteProcess, RegisterEventHandler, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.event_handlers import OnProcessExit, OnProcessStart, OnExecutionComplete
 
 from launch_ros.actions import Node
 
@@ -48,6 +49,13 @@ def generate_launch_description():
         arguments=["joint_broad"],
     )
 
+    ros2_control = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=spawn_entity,
+            on_exit=[diff_drive_spawner, joint_broad_spawner]
+        )
+    )
+
     encoder_data_record = Node(
         package="robot",
         executable="reading_encoder",
@@ -81,15 +89,56 @@ def generate_launch_description():
         output='screen'
     )
 
+    nav2_bringup = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    get_package_share_directory(package_name),'launch','navigation_launch.py'
+                )])
+    )
+
+    nav2_launch = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=spawn_entity,
+            on_exit=[nav2_bringup]
+        )
+    )
+
+    rviz = Node(
+        package="rviz2",
+        executable="rviz2",
+        name='rviz2',
+        arguments=['-d', os.path.join(get_package_share_path(package_name),'config','nav2_view.rviz')]
+    )
+
+    plotjuggler = Node(
+        package="plotjuggler",
+        executable="plotjuggler",
+     #   arguments="--layout $(find robot)/config/plotjuggler_layout.xml"
+    )
+
+    plotjuggler_launch = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=spawn_entity,
+            on_exit=[plotjuggler]
+        )
+    )
+
+    rviz_launch_delayed = TimerAction(period=20.0, actions=[rviz])
+    rviz_launch = RegisterEventHandler( 
+        event_handler=OnProcessStart( 
+            target_action=plotjuggler, 
+            on_start=[rviz_launch_delayed] ) )
+
     return LaunchDescription([
         rsp,
         gazebo,
         spawn_entity,
-        diff_drive_spawner,
-        joint_broad_spawner,
+        ros2_control,
+        nav2_launch,
         rosbag_record,
         encoder_data_record,
         laser_data_record,
         robot_velocity_data_record,
-        robot_monitor,
+        robot_monitor,  
+        plotjuggler_launch,
+        rviz_launch_delayed
     ])
