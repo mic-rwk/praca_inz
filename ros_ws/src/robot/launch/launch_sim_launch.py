@@ -112,7 +112,7 @@ def generate_launch_description():
     plotjuggler = Node(
         package="plotjuggler",
         executable="plotjuggler",
-     #   arguments="--layout $(find robot)/config/plotjuggler_layout.xml"
+        arguments=['-l', os.path.join(get_package_share_path(package_name),'config','plot_config.xml')]
     )
 
     plotjuggler_launch = RegisterEventHandler(
