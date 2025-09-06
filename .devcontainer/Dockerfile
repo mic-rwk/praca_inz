@@ -28,14 +28,17 @@ RUN sudo apt update && sudo apt upgrade -y
 RUN sudo apt install -y git \
                         ros-foxy-gazebo-ros-pkgs \
                         ros-foxy-xacro \
-                        ros-foxy-ros2-control \ 
+                        ros-foxy-ros2-control \
                         ros-foxy-ros2-controllers \
                         ros-foxy-gazebo-ros2-control \
                         ros-foxy-joint-state-publisher-gui \
                         ros-foxy-navigation2 \
                         ros-foxy-nav2-bringup \
                         ros-foxy-twist-mux \
-                        ros-foxy-slam-toolbox
+                        ros-foxy-slam-toolbox \
+                        ros-foxy-plotjuggler \
+                        ros-foxy-plotjuggler-ros \
+                        vim
 
 # Rosdep update
 RUN rosdep update
