@@ -11,10 +11,11 @@ from launch.event_handlers import OnProcessExit, OnProcessStart, OnExecutionComp
 from launch_ros.actions import Node
 
 import shutil
+from time import gmtime, strftime
 
 def generate_launch_description():
     
-    shutil.rmtree('src/robot/bag_files/data1', ignore_errors=True)
+    shutil.rmtree('src/robot/bag_files/', ignore_errors=True)
 
     package_name='robot'
 
@@ -25,17 +26,22 @@ def generate_launch_description():
     )
     
     gazebo_params_file = os.path.join(get_package_share_directory(package_name),'config','gazebo_params.yaml')
+    world_file = os.path.join(get_package_share_directory(package_name), "worlds", "willowgarage.world")
 
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')]),
-                    launch_arguments={'extra_gazebo_args': '--ros-args --params-file ' + gazebo_params_file}.items()
+                    launch_arguments={
+                        'world' : world_file,
+                        'extra_gazebo_args': '--ros-args --params-file ' + gazebo_params_file}
+                    .items()
     )
 
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-topic', 'robot_description',
                                    '-entity', 'my_bot'],
-                        output='screen')
+                        output='screen'
+    )
 
     diff_drive_spawner = Node(
         package="controller_manager",
@@ -84,8 +90,10 @@ def generate_launch_description():
         output={'both': 'log'}
     ) 
 
+    rosbag_log = "date-" + strftime("%H:%M:%S_%d.%m.%Y",gmtime())
+
     rosbag_record = ExecuteProcess(
-        cmd=['ros2', 'bag', 'record', '-o', './src/robot/bag_files/data1', '/robot_monitor'],
+        cmd=['ros2', 'bag', 'record', '-o', f'./src/robot/bag_files/{rosbag_log}', '/robot_monitor'],
         output='screen'
     )
 
