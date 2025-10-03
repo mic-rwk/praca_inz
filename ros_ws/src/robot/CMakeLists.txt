@@ -23,6 +23,10 @@ find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(message_filters REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(nav2_core REQUIRED)
+find_package(nav2_costmap_2d REQUIRED)
+
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -67,7 +71,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY description launch worlds config nodes
+  DIRECTORY description launch worlds config nodes map
   DESTINATION share/${PROJECT_NAME}
 )
 
