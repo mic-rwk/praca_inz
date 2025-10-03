@@ -38,7 +38,10 @@ RUN sudo apt install -y git \
                         ros-foxy-slam-toolbox \
                         ros-foxy-plotjuggler \
                         ros-foxy-plotjuggler-ros \
-                        vim
+                        ros-foxy-rqt-* \
+                        vim \
+                        psmisc \
+                        python3-pip
 
 # Rosdep update
 RUN rosdep update
