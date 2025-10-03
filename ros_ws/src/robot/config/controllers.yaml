@@ -41,23 +41,23 @@ diff_controller:
     # velocity_rolling_window_size: x
     
 
-    # linear.x.has_velocity_limits: false
-    # linear.x.has_acceleration_limits: false
+    linear.x.has_velocity_limits: true
+    linear.x.has_acceleration_limits: true
     # linear.x.has_jerk_limits: false
-    # linear.x.max_velocity: NAN
-    # linear.x.min_velocity: NAN
-    # linear.x.max_acceleration: NAN
-    # linear.x.min_acceleration: NAN
+    linear.x.max_velocity: 4.0
+    linear.x.min_velocity: -3.0
+    linear.x.max_acceleration: 1.5
+    linear.x.min_acceleration: -1.5
     # linear.x.max_jerk: NAN
     # linear.x.min_jerk: NAN
 
-    # angular.z.has_velocity_limits: false
-    # angular.z.has_acceleration_limits: false
+    angular.z.has_velocity_limits: true
+    angular.z.has_acceleration_limits: true
     # angular.z.has_jerk_limits: false
-    # angular.z.max_velocity: NAN
-    # angular.z.min_velocity: NAN
-    # angular.z.max_acceleration: NAN
-    # angular.z.min_acceleration: NAN
+    angular.z.max_velocity: 3.0
+    angular.z.min_velocity: -3.0
+    angular.z.max_acceleration: 1.5
+    angular.z.min_acceleration: -1.5
     # angular.z.max_jerk: NAN
     # angular.z.min_jerk: NAN
 
