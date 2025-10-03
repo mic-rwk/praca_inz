@@ -4,7 +4,8 @@ ros_ws/log
 ros_ws/install
 
 #DB files from ros bag
-ros_ws/src/robot/bag_files/data1/
+ros_ws/src/robot/bag_files/
 
 #csv files
-database/collected_data
+ai/csv_from_ros_bag/*.csv
+ai/datasets/*.csv
