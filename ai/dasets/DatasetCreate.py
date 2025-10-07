@@ -51,16 +51,19 @@ def extract_data(source_file_path, options=("laser", "encoder", "velocity", "dif
         parsed = parse_ros_string(row["Data"])
         rec = {"Timestamp": row["Timestamp"]}
 
-        if "laser" in options and "laser_ranges" in parsed:
-            rec["laser_ranges"] = parsed["laser_ranges"]
+        if "velocity" in options:
+            rec["velocity_linear"] = parsed.get("velocity_linear")
+            rec["velocity_angular"] = parsed.get("velocity_angular")
 
         if "encoder" in options:
             rec["encoder_left"] = parsed.get("encoder_left")
             rec["encoder_right"] = parsed.get("encoder_right")
+        else:
+            rec["encoder_left"] = "nil"
+            rec["encoder_right"] = "nil"
 
-        if "velocity" in options:
-            rec["velocity_linear"] = parsed.get("velocity_linear")
-            rec["velocity_angular"] = parsed.get("velocity_angular")
+        if "laser" in options and "laser_ranges" in parsed:
+            rec["laser_ranges"] = parsed["laser_ranges"]
 
         if "diff_laser" in options and "diff_laser_ranges" in parsed:
             rec["diff_laser_ranges"] = parsed.get("diff_laser_ranges")
