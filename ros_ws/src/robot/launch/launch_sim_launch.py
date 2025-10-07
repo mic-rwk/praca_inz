@@ -1,4 +1,6 @@
 import os
+import shutil
+from time import gmtime, strftime
 
 from ament_index_python.packages import get_package_share_directory, get_package_share_path
 
@@ -10,14 +12,12 @@ from launch.event_handlers import OnProcessExit, OnProcessStart, OnExecutionComp
 
 from launch_ros.actions import Node
 
-import shutil
-from time import gmtime, strftime
-
 def generate_launch_description():
     
     # shutil.rmtree('src/robot/bag_files/', ignore_errors=True)
 
-    package_name='robot'
+    package_name= 'robot'
+    world_name = 'willowgarage' #maze_1 or maze_2
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -26,7 +26,7 @@ def generate_launch_description():
     )
     
     gazebo_params_file = os.path.join(get_package_share_directory(package_name),'config','gazebo_params.yaml')
-    world_file = os.path.join(get_package_share_directory(package_name), "worlds", "willowgarage.world")
+    world_file = os.path.join(get_package_share_directory(package_name), "worlds", f"{world_name}.world")
 
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -100,7 +100,7 @@ def generate_launch_description():
     rosbag_log = "date-" + strftime("%H:%M:%S_%d.%m.%Y",gmtime())
 
     rosbag_record = ExecuteProcess(
-        cmd=['ros2', 'bag', 'record', '-o', f'./src/robot/bag_files/{rosbag_log}', '/robot_monitor'],
+        cmd=['ros2', 'bag', 'record', '-o', f'./src/robot/bag_files/{world_name}/{rosbag_log}', '/robot_monitor'],
         output='screen'
     )
 
