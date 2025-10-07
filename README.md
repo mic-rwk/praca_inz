@@ -20,11 +20,7 @@ Pierwszym etapem było stworzenie symulacji w środowisku ROS2 Foxy. Podczas sym
 
 ### Zbieranie danych
 
-Zbieranie danych odbywa się na zasadzie przedstawionej poniżej.
-
-![Alt text](res/topics.png)
-
-W tym celu wykorzystywane są topici:  */joint_states* ,  */scan*  oraz */odom*. Następnie klasy związane z: prędkościami enkoderów, skanami z lidara oraz odometrią przetwarzają w odpowiedni sposób wiadomości z tych topiców. Potem publikują nowe, odpowiednie wiadomości (zdefiniowane w folderze msg) do nowych topików. Później dane są synchronizowane w czasie, dzięki paczce [MessageFilters](https://docs.ros.org/en/rolling/p/message_filters/), zaimplementowanej w klasie *RobotMonitor*. Następnie dane są "nagrywane" przez *rosbaga*, który subskrybuje topic */robot_monitor.*
+Zbieranie danych odbywa się z wykorzystywaniem topic'ów:  */joint_states* ,  */scan*  oraz */odom*. Następnie klasy związane z: prędkościami enkoderów, skanami z lidara oraz odometrią przetwarzają w odpowiedni sposób wiadomości z tych topiców. Potem publikują nowe, odpowiednie wiadomości (zdefiniowane w folderze msg) do nowych topików. Później dane są synchronizowane w czasie, dzięki paczce [MessageFilters](https://docs.ros.org/en/rolling/p/message_filters/), zaimplementowanej w klasie *RobotMonitor*. Następnie dane są "nagrywane" przez *rosbaga*, który subskrybuje topic */robot_monitor.*
 
 ```python
     rosbag_record = ExecuteProcess(
@@ -35,12 +31,12 @@ W tym celu wykorzystywane są topici:  */joint_states* ,  */scan*  oraz */odom*.
 
 ### Mapowanie
 
-Kolejnym krokiem było mapowanie terenu. W tym celu wykorzystano gotowy świat z Gazebo - [WillowGarage](https://github.com/arpg/Gazebo/blob/master/worlds/willowgarage.world). Włączono symulację w Gazebo. Następnie wykorzystano launchfile online_async_launch z paczki slamtoolbox, aby zmapować teren. W celu sprawdzenie poprawności mapy uruchomiono program rviz2. Aby poruszać się robotem wykorzystano teleop.
+Kolejnym krokiem było mapowanie terenu. W tym celu wykorzystano gotowy świat z Gazebo - [WillowGarage](https://github.com/arpg/Gazebo/blob/master/worlds/willowgarage.world) oraz - [mapy labiryntów](https://github.com/HaiderAbasi/ROS2-Path-Planning-and-Maze-Solving). Włączono symulację w Gazebo. Następnie wykorzystano launchfile online_async_launch z paczki slamtoolbox, aby zmapować teren. W celu sprawdzenie poprawności mapy uruchomiono program rviz2. Aby poruszać się robotem wykorzystano teleop.
 
 ```bash
 ros2 launch robot launch_sim_launch.py world:=./src/robot/worlds/willowgarage.world
 
-ros2 launch slamtoolbox online_async_launch.py use_sim_time:=true
+ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true
 
 ros2 run rviz2 rviz2 -d /opt/ros/foxy/share/nav2_bringup/rviz/nav2_default_view.rviz 
 
@@ -53,13 +49,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/di
 Po uruchomieniu świata Gazebo, włączono nav2_bringup, aby umożliwić nawigację robota. Włączono Rviza, aby mieć podgląc, jak przebiega nawigacja w świecie. Dodatkowo użyto *twist_mux*, aby móc korzystać z 2 źródeł dla prędkości - z nav2 oraz teleop.
 
 ```bash
-ros2 launch robot launch_sim_launch.py world:=./src/robot/worlds/willowgarage.world
-
-ros2 launch nav2_bringup bringup_launch.py use_sim_time:=true autostart:=true map:=./src/robot/map/1_willowgarage/map_save2.yaml params_file:=./src/robot/config/nav2_params.yaml
-
-ros2 run rviz2 rviz2 -d /opt/ros/foxy/share/nav2_bringup/rviz/nav2_default_view.rviz 
-
-ros2 run twist_mux twist_mux --ros-args --params-file src/robot/config/twist_mux.yaml -r cmd_vel_out:=diff_controller/cmd_vel_unstamped
+ros2 launch robot launch_sim_launch.py
 ```
 
 ![Alt text](res/navigation.png)
