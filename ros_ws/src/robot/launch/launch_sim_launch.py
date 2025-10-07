@@ -143,25 +143,27 @@ def generate_launch_description():
             target_action=plotjuggler, 
             on_start=[rviz_launch_delayed] ) )
 
-    # twist_mux_params = os.path.join(get_package_share_directory(package_name),'config','twist_mux.yaml')
-    # twist_mux = Node(
-    #         package="twist_mux",
-    #         executable="twist_mux",
-    #         parameters=[twist_mux_params],
-    #         remappings=[('/cmd_vel_out','/diff_cont/cmd_vel_unstamped')]
-    # )
+    twist_mux_params = os.path.join(get_package_share_directory(package_name),'config','twist_mux.yaml')
+    twist_mux = Node(
+            package="twist_mux",
+            executable="twist_mux",
+            parameters=[twist_mux_params],
+            remappings=[('/cmd_vel_out','/diff_controller/cmd_vel_unstamped')],
+            output='screen'
+    )
 
-    # twist_node = RegisterEventHandler( 
-    #     event_handler=OnProcessStart( 
-    #         target_action=rviz, 
-    #         on_start=[twist_mux] ) 
-    # )
+    twist_node = RegisterEventHandler( 
+        event_handler=OnProcessExit( 
+            target_action=spawn_entity, 
+            on_exit=[twist_mux] ) 
+    )
 
     return LaunchDescription([
         rsp,
         gazebo,
         spawn_entity,
         ros2_control,
+        twist_node,
         nav2_launch,
         rosbag_record,
         encoder_data_record,
@@ -170,6 +172,5 @@ def generate_launch_description():
         robot_velocity_data_record,
         robot_monitor,  
         plotjuggler_launch,
-        rviz_launch_delayed,
-        # twist_node
+        rviz_launch_delayed       
     ])
