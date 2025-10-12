@@ -1,9 +1,11 @@
 #https://medium.com/@indigo.starr/reading-ros2-db3-rosbag-file-in-python-76566521ce3d
-
+import argparse
+import csv
+import os
+from pathlib import Path
 import sqlite3
 from rosidl_runtime_py.utilities import get_message
 from rclpy.serialization import deserialize_message
-import csv
 
 def connect(sqlite_file):
     conn = sqlite3.connect(sqlite_file)
@@ -149,47 +151,62 @@ def getMsgType(cursor, topic_name, print_out=False):
 
     return msg_type
 
+def getAllTopics(cursor):
+    cursor.execute("SELECT name, type FROM topics")
+    return dict(cursor.fetchall())
+
+def process_rosbag(bag_file, topic_name, output_root):
+    print(f"Processing bag file: {bag_file}")
+
+    conn, c = connect(bag_file)
+    topics = getAllTopics(c)
+
+    msg_type = get_message(topics[topic_name])
+    timestamps, messages = getAllMessagesInTopic(c, topic_name)
+    close(conn)
+
+    bag_path = Path(bag_file)
+    map_name = bag_path.parents[1].name
+    date_split= bag_path.stem.split('_')
+    date_str = f"{date_split[0]}_{date_split[1]}"
+
+    output_dir = Path(output_root) / map_name
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    output_csv = output_dir / f"collected_data_{date_str}.csv"
+
+    print(f"Saving to: {output_csv}")
+
+    with open(output_csv, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+
+        for timestamp, raw in zip(timestamps, messages):
+            msg = deserialize_message(raw, msg_type)
+            writer.writerow([timestamp, str(msg)])
+
+    print(f"Done: {len(messages)} messages saved to {output_csv}\n")
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Convert .db3 bag file to CSV file"
+    )
+    parser.add_argument(
+        "-b", "--bags", nargs="+", required=True,
+        help="Path to .db3 file"
+    )
+    parser.add_argument(
+        "-t", "--topic", required=True,
+        help="Nazwa topicu do wyeksportowania (np. /robot_monitor)"
+    )
+    parser.add_argument(
+        "-o", "--output", default="../ai/csv_from_rosbag",
+        help="Folder główny do zapisu CSV"
+    )
 
-        # Specify the path for the CSV file
-        csv_file_path = '../ai/csv_from_rosbag/collected_data.csv'
+    args = parser.parse_args()
 
-        # path to the bagfile
-        bag_file = '../ros_ws/src/robot/bag_files/date-13:02:58_03.10.2025/date-13:02:58_03.10.2025_0.db3'
-
-        # topic name
-        topic_name = '/robot_monitor'
-
-        ### connect to the database
-        conn, c = connect(bag_file)
-
-        ### get all topics names and types
-        topic_names = getAllTopicsNames(c, print_out=False)
-        topic_types = getAllMsgsTypes(c, print_out=False)
-
-        # Create a map for quicker lookup
-        type_map = {topic_names[i]:topic_types[i] for i in range(len(topic_types))}
-
-        ### get all timestamps and all messages
-        t, msgs = getAllMessagesInTopic(c, topic_name, print_out=True)
-
-        # Deserialize the message
-        msg_type = get_message(type_map[topic_name])  # Assuming type_map is a dictionary mapping topic names to message types
-        
-        # Open the CSV file for writing
-        with open(csv_file_path, 'w', newline='') as csvfile:
-            # Create a CSV writer
-            csv_writer = csv.writer(csvfile)
-            
-            for timestamp, message in zip(t, msgs):
-                    deserialized_msg = deserialize_message(message, msg_type)
-
-                    # Print or process the deserialized message
-                    print(f"Timestamp: {timestamp}")
-                    print(f"Deserialized Message: {deserialized_msg}")
-                    
-                    csv_writer.writerow([timestamp, deserialized_msg])
-    
-        ### close connection to the database
-        close(conn)
+    for bag in args.bags:
+        try:
+            process_rosbag(bag, args.topic, args.output)
+        except Exception as e:
+            print(f"Error processing {bag}: {e}")
