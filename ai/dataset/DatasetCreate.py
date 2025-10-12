@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 import re
 import ast
@@ -73,11 +74,21 @@ def extract_data(source_file_path, options=("laser", "encoder", "velocity", "dif
     return pd.DataFrame(records)
 
 if __name__ == "__main__":
-    source_file = "./csv_from_rosbag/willowgarage/collected_data_date-20:23:45_07.10.2025.csv"
-    csv_output = "./csv_output/"
 
-    if not os.path.exists(csv_output):
-        os.makedirs(csv_output)
+    parser = argparse.ArgumentParser(
+        prog='DatasetCreate',
+        description='Convert CSV that contains rosbag output to CSV with bare information for NN'
+    )
+    parser.add_argument("-f", "--filename")
+    
+    args = parser.parse_args()
+
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+
+    project_root = os.path.abspath(os.path.join(script_directory, ".."))
+    source_file = os.path.join(project_root, args.filename) if not os.path.isabs(args.filename) else args.filename
+
+    csv_output = "./csv_output/"
 
     df_laser = extract_data(source_file, options=("laser", "velocity"))
     df_laser.to_csv(f"{csv_output}laser.csv", index=False)
