@@ -1,5 +1,7 @@
 #include <chrono>
+#include <cmath>
 #include <functional>
+#include <limits>
 #include <memory>
 #include <string>
 
@@ -17,40 +19,57 @@ class DiffLaser : public rclcpp::Node
 public:
     DiffLaser() : Node("diff_laser")
     {
-        subscription_ = this->create_subscription<robot::msg::LaserData>(
-            "/scan_data", 10, std::bind(&DiffLaser::topic_callback, this, std::placeholders::_1));
+        subscription_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
+            "scan", 10, std::bind(&DiffLaser::topic_callback, this, _1));
 
-        publisher_ = this->create_publisher<robot::msg::LaserData>("/scan_diff", 10);
+        publisher_ = this->create_publisher<robot::msg::LaserData>("scan_diff", 10);
     }
 
 private:
-    void topic_callback(const robot::msg::LaserData::SharedPtr _msg)
+    void topic_callback(const sensor_msgs::msg::LaserScan::SharedPtr _msg)
     {
-        if (!prev_scan_) {
-            prev_scan_ = std::make_shared<robot::msg::LaserData>();
-            prev_scan_->header.stamp = _msg->header.stamp;
-            prev_scan_->ranges = std::vector<double>(_msg->ranges.begin(), _msg->ranges.end());
+        if (!_msg || _msg->ranges.empty()) {
+            RCLCPP_WARN(this->get_logger(), "Received empty LaserScan message.");
             return;
         }
 
-        robot::msg::LaserData::SharedPtr diff_msg = std::make_shared<robot::msg::LaserData>();
-        diff_msg->header.stamp = _msg->header.stamp;
-        diff_msg->ranges = std::vector<double>(_msg->ranges.begin(), _msg->ranges.end());
-
-        for(size_t i = 0; i < _msg->ranges.size(); i++)
-        {
-            diff_msg->ranges[i] = _msg->ranges[i] - prev_scan_->ranges[i];
-            RCLCPP_INFO(this->get_logger(), "Range : %f", diff_msg->ranges[i]);
+        if (!prev_scan_) {
+            prev_scan_ = std::make_shared<sensor_msgs::msg::LaserScan>(*_msg);
+            return;
         }
 
-        publisher_->publish(*diff_msg);
-        prev_scan_->header.stamp = _msg->header.stamp;
-        prev_scan_->ranges = std::vector<double>(_msg->ranges.begin(), _msg->ranges.end());
+        if (prev_scan_->ranges.size() != _msg->ranges.size()) {
+            prev_scan_ = std::make_shared<sensor_msgs::msg::LaserScan>(*_msg);
+            return;
+        }
+
+        robot::msg::LaserData diff_msg;
+        diff_msg.header.stamp = _msg->header.stamp;
+        diff_msg.ranges.resize(_msg->ranges.size());
+
+        for (size_t i = 0; i < _msg->ranges.size(); ++i) {
+            float current = _msg->ranges[i];
+            float previous = prev_scan_->ranges[i];
+
+            if (std::isnan(current) || std::isnan(previous)) {
+                diff_msg.ranges[i] = std::numeric_limits<double>::quiet_NaN();
+            } 
+            else if(std::isinf(current) || std::isinf(previous)) {
+                diff_msg.ranges[i] = std::numeric_limits<double>::infinity();
+            }
+            else {
+                diff_msg.ranges[i] = static_cast<double>(current - previous);
+            }
+        }
+
+        publisher_->publish(diff_msg);
+
+        *prev_scan_ = *_msg;
     }
 
-    rclcpp::Subscription<robot::msg::LaserData>::SharedPtr subscription_;
+    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr subscription_;
     rclcpp::Publisher<robot::msg::LaserData>::SharedPtr publisher_;
-    robot::msg::LaserData::SharedPtr prev_scan_;
+    std::shared_ptr<sensor_msgs::msg::LaserScan> prev_scan_;
 };
 
 int main(int argc, char **argv)
