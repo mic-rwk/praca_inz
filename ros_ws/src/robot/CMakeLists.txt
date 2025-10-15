@@ -20,6 +20,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(message_filters REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
@@ -36,6 +37,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/LaserData.msg"
   "msg/VelocityData.msg"
   "msg/CollectedData.msg"
+  "msg/PoseData.msg"
   DEPENDENCIES std_msgs sensor_msgs
 )
 
@@ -54,6 +56,10 @@ rosidl_target_interfaces(reading_laser ${PROJECT_NAME} "rosidl_typesupport_cpp")
 add_executable(reading_diff_laser ./nodes/DiffLaser.cpp)
 ament_target_dependencies(reading_diff_laser rclcpp std_msgs sensor_msgs)
 rosidl_target_interfaces(reading_diff_laser ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+add_executable(reading_pose ./nodes/Pose.cpp)
+ament_target_dependencies(reading_pose rclcpp std_msgs geometry_msgs nav2_msgs tf2 tf2_ros tf2_geometry_msgs)
+rosidl_target_interfaces(reading_pose ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 add_executable(robot_monitor ./nodes/RobotMonitor.cpp)
 ament_target_dependencies(robot_monitor rclcpp std_msgs message_filters)
@@ -76,7 +82,7 @@ install(
 )
 
 install(TARGETS
-  reading_laser reading_encoder reading_velocities robot_monitor reading_diff_laser
+  reading_laser reading_encoder reading_velocities robot_monitor reading_diff_laser reading_pose
   DESTINATION lib/${PROJECT_NAME}
 )
 
