@@ -17,7 +17,7 @@ def generate_launch_description():
     # shutil.rmtree('src/robot/bag_files/', ignore_errors=True)
 
     package_name= 'robot'
-    world_name = 'willowgarage' #maze_1 or maze_2
+    world_name = 'maze_3' #maze_1 or maze_2
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -40,7 +40,7 @@ def generate_launch_description():
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-topic', 'robot_description',
                                    '-entity', 'my_bot',
-                                   '-timeout', '60'],
+                                   '-timeout', '50.0'],
                         output='screen'
     )
 
