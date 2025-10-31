@@ -30,7 +30,7 @@
         <sensor name="laser" type="ray">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
-            <update_rate>10</update_rate>
+            <update_rate>5.5</update_rate>
             <ray>
                 <scan>
                     <horizontal>
@@ -40,7 +40,7 @@
                     </horizontal>
                 </scan>
                 <range>
-                    <min>0.3</min>
+                    <min>0.2</min>
                     <max>12</max>
                 </range>
             </ray>
