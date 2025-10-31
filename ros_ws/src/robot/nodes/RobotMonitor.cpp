@@ -24,9 +24,7 @@ using std::placeholders::_5;
 
 using ApproxSyncPolicy = message_filters::sync_policies::ApproximateTime<robot::msg::EncoderData,
                                                                          robot::msg::VelocityData,
-                                                                         robot::msg::LaserData,
-                                                                         robot::msg::LaserData,
-                                                                         robot::msg::PoseData>;
+                                                                         robot::msg::LaserData>;
 
 class RobotMonitor : public rclcpp::Node {
 public:
@@ -35,14 +33,11 @@ public:
     encoder_subscription.subscribe(this, "encoder_data");
     velocity_subscription.subscribe(this, "robot_velocity_data");
     laser_subscription.subscribe(this, "scan_data");
-    diff_laser_subscription.subscribe(this, "scan_diff");
-    pose_subscription.subscribe(this, "pose_data");
 
     sync_ = std::make_shared<message_filters::Synchronizer<ApproxSyncPolicy>>
-    (ApproxSyncPolicy(10), encoder_subscription, velocity_subscription, laser_subscription, diff_laser_subscription,
-     pose_subscription);
+    (ApproxSyncPolicy(10), encoder_subscription, velocity_subscription, laser_subscription);
 
-    sync_->registerCallback(std::bind(&RobotMonitor::synchronized_callback, this, _1, _2, _3, _4, _5));
+    sync_->registerCallback(std::bind(&RobotMonitor::synchronized_callback, this, _1, _2, _3));
 
     publisher_ = this->create_publisher<robot::msg::CollectedData>("robot_monitor", 10);
   }
@@ -50,9 +45,7 @@ public:
 private:
   void synchronized_callback(const robot::msg::EncoderData::ConstSharedPtr encoder_msg,
                              const robot::msg::VelocityData::ConstSharedPtr velocity_msg,
-                             const robot::msg::LaserData::ConstSharedPtr scan_msg,
-                             const robot::msg::LaserData::ConstSharedPtr diff_scan_msg,
-                             const robot::msg::PoseData::ConstSharedPtr pose_msg) {
+                             const robot::msg::LaserData::ConstSharedPtr scan_msg) {
 
     RCLCPP_INFO(this->get_logger(), "Encoder: Left: %f Right: %f", encoder_msg->left, encoder_msg->right);
 
@@ -63,15 +56,11 @@ private:
       RCLCPP_INFO(this->get_logger(), " %f", scan_msg->ranges[i]);
     }
 
-    RCLCPP_INFO(this->get_logger(), "Pose - X: %f\tY: %f\tYaw: %f", pose_msg->x_pose, pose_msg->y_pose, pose_msg->yaw_pose);
-
     robot::msg::CollectedData robot_monitor_output;
     robot_monitor_output.header.stamp = this->get_clock()->now();
     robot_monitor_output.encoder_data = *encoder_msg;
     robot_monitor_output.velocity_data = *velocity_msg;
     robot_monitor_output.laser_data = *scan_msg;
-    robot_monitor_output.diff_laser_data = *diff_scan_msg;
-    robot_monitor_output.pose_data = *pose_msg;
 
     publisher_->publish(robot_monitor_output);
   }
@@ -79,8 +68,6 @@ private:
   message_filters::Subscriber<robot::msg::EncoderData> encoder_subscription;
   message_filters::Subscriber<robot::msg::VelocityData> velocity_subscription;
   message_filters::Subscriber<robot::msg::LaserData> laser_subscription;
-  message_filters::Subscriber<robot::msg::LaserData> diff_laser_subscription;
-  message_filters::Subscriber<robot::msg::PoseData> pose_subscription;
 
   std::shared_ptr<message_filters::Synchronizer<ApproxSyncPolicy>> sync_;
 

@@ -84,20 +84,6 @@ def generate_launch_description():
         output={'both': 'log'}
     )
 
-    diff_laser_data_record = Node(
-        package="robot",
-        executable="reading_diff_laser",
-        arguments=["reading_diff_laser"],
-        output={'both': 'log'}
-    )
-
-    pose_data_record = Node(
-        package="robot",
-        executable="reading_pose",
-        arguments=["reading_pose"],
-        output={'both': 'log'}
-    ) 
-
     robot_monitor = Node(
         package="robot",
         executable="robot_monitor",
@@ -176,9 +162,7 @@ def generate_launch_description():
         rosbag_record,
         encoder_data_record,
         laser_data_record,
-        diff_laser_data_record,
         robot_velocity_data_record,
-        pose_data_record,
         robot_monitor,  
         plotjuggler_launch,
         rviz_launch_delayed       

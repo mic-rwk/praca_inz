@@ -1,6 +1,4 @@
 std_msgs/Header header
 EncoderData encoder_data
 LaserData laser_data
-LaserData diff_laser_data
 VelocityData velocity_data
-PoseData pose_data
