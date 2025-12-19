@@ -71,7 +71,20 @@ def extract_data(source_file_path, options=("laser", "encoder", "velocity", "dif
 
         records.append(rec)
 
-    return pd.DataFrame(records)
+    result_df = pd.DataFrame(records)
+
+    # Some robot firmware may publish cumulative encoder counts instead of
+    # instantaneous velocities. Convert to delta (instantaneous) by differencing.
+    if 'encoder_left' in result_df.columns and 'encoder_right' in result_df.columns:
+        # Ensure numeric (coerce 'nil' or bad strings to NaN)
+        result_df['encoder_left'] = pd.to_numeric(result_df['encoder_left'], errors='coerce')
+        result_df['encoder_right'] = pd.to_numeric(result_df['encoder_right'], errors='coerce')
+
+        # Differentiate cumulative encoder values to obtain per-sample increments
+        result_df['encoder_left'] = result_df['encoder_left'].diff().fillna(0)
+        result_df['encoder_right'] = result_df['encoder_right'].diff().fillna(0)
+
+    return result_df
 
 if __name__ == "__main__":
 
@@ -90,14 +103,14 @@ if __name__ == "__main__":
 
     csv_output = "./csv_output/"
 
-    df_laser = extract_data(source_file, options=("laser", "velocity"))
-    df_laser.to_csv(f"{csv_output}laser.csv", index=False)
+    # df_laser = extract_data(source_file, options=("laser", "velocity"))
+    # df_laser.to_csv(f"{csv_output}laser.csv", index=False)
 
     df_combo = extract_data(source_file, options=("laser", "encoder", "velocity"))
     df_combo.to_csv(f"{csv_output}laser_encoder.csv", index=False)
 
-    df_diff_laser = extract_data(source_file, options=("diff_laser", "velocity"))
-    df_diff_laser.to_csv(f"{csv_output}diff_laser.csv", index=False)
+    # df_diff_laser = extract_data(source_file, options=("diff_laser", "velocity"))
+    # df_diff_laser.to_csv(f"{csv_output}diff_laser.csv", index=False)
 
-    df_diff_encoder = extract_data(source_file, options=("diff_laser", "encoder", "velocity"))
-    df_diff_encoder.to_csv(f"{csv_output}diff_laser_encoder.csv", index=False)
+    # df_diff_encoder = extract_data(source_file, options=("diff_laser", "encoder", "velocity"))
+    # df_diff_encoder.to_csv(f"{csv_output}diff_laser_encoder.csv", index=False)
