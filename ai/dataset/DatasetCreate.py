@@ -4,6 +4,7 @@ import re
 import ast
 import os
 import math
+import glob
 
 def parse_ros_string(s):
     data = {}
@@ -87,30 +88,39 @@ def extract_data(source_file_path, options=("laser", "encoder", "velocity", "dif
     return result_df
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(
         prog='DatasetCreate',
         description='Convert CSV that contains rosbag output to CSV with bare information for NN'
     )
-    parser.add_argument("-f", "--filename")
+    # Zmieniamy argument -f, aby obsługiwał wzorce (np. "*2026*")
+    parser.add_argument("-f", "--filename", help="Nazwa pliku lub wzorzec (np. '*2026*.csv')")
+    # Dodajemy argument dla ścieżki wyjściowej
+    parser.add_argument("-o", "--output", default="./csv_output/", help="Folder docelowy dla plików CSV")
     
     args = parser.parse_args()
 
-    script_directory = os.path.dirname(os.path.abspath(__file__))
+    # Tworzenie folderu wyjściowego, jeśli nie istnieje
+    if not os.path.exists(args.output):
+        os.makedirs(args.output)
+        print(f"Utworzono folder: {args.output}")
 
-    project_root = os.path.abspath(os.path.join(script_directory, ".."))
-    source_file = os.path.join(project_root, args.filename) if not os.path.isabs(args.filename) else args.filename
+    # Znajdowanie wszystkich plików pasujących do wzorca
+    files = glob.glob(args.filename)
 
-    csv_output = "./csv_output/"
-
-    # df_laser = extract_data(source_file, options=("laser", "velocity"))
-    # df_laser.to_csv(f"{csv_output}laser.csv", index=False)
-
-    df_combo = extract_data(source_file, options=("laser", "encoder", "velocity"))
-    df_combo.to_csv(f"{csv_output}laser_encoder.csv", index=False)
-
-    # df_diff_laser = extract_data(source_file, options=("diff_laser", "velocity"))
-    # df_diff_laser.to_csv(f"{csv_output}diff_laser.csv", index=False)
-
-    # df_diff_encoder = extract_data(source_file, options=("diff_laser", "encoder", "velocity"))
-    # df_diff_encoder.to_csv(f"{csv_output}diff_laser_encoder.csv", index=False)
+    if not files:
+        print(f"Nie znaleziono plików pasujących do wzorca: {args.filename}")
+    else:
+        for file_path in files:
+            print(f"Przetwarzam: {file_path}")
+            
+            # Pobieramy nazwę pliku bez rozszerzenia do stworzenia unikalnej nazwy wyjściowej
+            base_name = os.path.splitext(os.path.basename(file_path))[0]
+            
+            # Wywołanie Twojej funkcji extract_data
+            df_combo = extract_data(file_path, options=("laser", "encoder", "velocity"))
+            
+            # Dynamiczna nazwa pliku wyjściowego
+            output_file = os.path.join(args.output, f"laser_encoder_{base_name}.csv")
+            
+            df_combo.to_csv(output_file, index=False)
+            print(f"Zapisano do: {output_file}")

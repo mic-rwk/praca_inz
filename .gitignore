@@ -7,7 +7,10 @@ ros_ws/install
 ros_ws/src/robot/bag_files/
 
 #csv files
-ai/csv_from_rosbag/*.csv
+ai/csv_from_rosbag/*
 ai/csv_output/*.csv
+ai/processed/*
+ai/csv_output/*
 
-ai/venv/
+ai/.venv/
+ai/model/

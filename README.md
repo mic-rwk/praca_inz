@@ -53,3 +53,61 @@ ros2 launch robot launch_sim_launch.py
 ```
 
 ![Alt text](res/navigation.png)
+
+## Instalacja
+
+```bash
+git clone https://github.com/mic-rwk/praca_inz.git
+```
+
+### Otwarcie konteru Dockera
+
+Przez basha lub w VSCode CTRL+SHIFT+P -> Rebuild Container. W celu włączenia Gazebo konieczne może być ustawienie tej komendy:
+
+```bash
+export DISPLAY=":0"
+```
+
+```bash
+xhost +
+```
+
+### Uruchomienie symulacji
+
+```bash
+cd ros_ws
+```
+
+```bash
+source install/setup.bash
+```
+
+W ciągu 10-20 sekund uruchamia się: Gazebo, RViz, PlotJuggler (wyświetlanie prędkości robota mobilnego) oraz Nav2.
+
+```bash
+ros2 launch robot launch_sim_launch.py
+```
+
+Następnie można ręcznie sterować robotem przez RViz lub z wykorzystanime node auto_goal_setter. Node będzie zlecał automatycznie nowe punkty, do których robot ma jechać. 
+
+```bash
+ros2 run robot auto_goal_setter.py
+```
+
+Przekonwertuj rosbaga do csv.
+
+```bash
+python3 RosbagParser.py -b $(find src/robot/bag_files/willowgarage -name "*2026*") -t /robot_monitor
+```
+
+Zapisz z CSV do przefiltrowanego CSV - same liczby, bez wiadomości z ROSa.
+
+```bash
+python3 dataset/DatasetCreate.py -f "csv_from_rosbag/willowgarage/*" -o "csv_output/willow2"
+```
+
+Uruchom proces uczenia. Zweryfikuj wyniki na zbiorze testowym.
+
+```bash
+python3 dataset/create_models.py
+```

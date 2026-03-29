@@ -17,7 +17,7 @@ def generate_launch_description():
     # shutil.rmtree('src/robot/bag_files/', ignore_errors=True)
 
     package_name= 'robot'
-    world_name = 'maze_3' #maze_1 or maze_2
+    world_name = 'willowgarage' #maze_1 or maze_2
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
